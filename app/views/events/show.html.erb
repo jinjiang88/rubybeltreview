@@ -1,0 +1,35 @@
+<a href="/events">Event Dashboard</a>
+<h1><%= @event.name %></h1>
+<h2>Date: <%= @event.date.strftime("%B %d, %Y") %></h2>
+<h2>Host: <%= @event.user.fname %> <%= @event.user.lname %></h2>
+<h2>Location: <%= @event.location %> <%=@event.state %></h2>
+<h2>People who are joining the event: <%= @event_users.count %></h2>
+
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Location</th>
+		<th>State</th>
+	</tr>
+	<% @event_users.each do |event_user| %>
+	<tr>
+		<td><%= event_user.fname %> <%= event_user.lname %></td>
+		<td><%= event_user.location %></td>
+		<td><%= event_user.state %></</td>
+	</tr>
+	<% end %>
+</table>
+
+<h2>Discussion about this event: </h2>
+<% if @comments %>
+<% @comments.each do |comment| %>
+<p><%= comment.user.fname %> says: <%= comment.content %></p>
+<% end %>
+<% end %>
+<p>Add Comment</p>
+<form action = "/comments" method = "post">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="hidden" name="comment[event_id]" value = "<%= @event.id %>">
+	<p><input type="text" name = "comment[content]"></p>
+	<input type="submit" value="Submit Comments">
+</form>
